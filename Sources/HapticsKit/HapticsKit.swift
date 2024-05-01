@@ -14,6 +14,7 @@ import CoreHaptics
 import WatchKit
 #endif
 
+@MainActor
 public enum HapticsKit {
 
     /// A  `Bool`  indicating whether haptic feedback is supported on the user's device.
