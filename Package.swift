@@ -21,7 +21,9 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "HapticsKit",
-            resources: [.process("Resources")]),
+            resources: [.process("Resources")],
+            swiftSettings: [.swiftLanguageVersion(.v6)]
+        ),
         .testTarget(
             name: "HapticsKitTests",
             dependencies: ["HapticsKit"]),
