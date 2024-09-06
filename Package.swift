@@ -23,7 +23,7 @@ let package = Package(
         .target(
             name: "HapticsKit",
             resources: [.process("Resources")],
-            swiftSettings: [.swiftLanguageVersion(.v6)]
+            swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .testTarget(
             name: "HapticsKitTests",
