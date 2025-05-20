@@ -14,8 +14,33 @@ import CoreHaptics
 import WatchKit
 #endif
 
-@MainActor
-public enum HapticsKit {
+@MainActor @Observable
+public final class HapticsKit {
+
+    /// An initialised `HapticsKit` object.
+    private static var initializedHapticsKit: HapticsKit?
+    
+    /// The shared `HapticsKit` object to use for creating haptics feedback.
+    public static var shared: HapticsKit {
+        if let initializedHapticsKit {
+            return initializedHapticsKit
+        } else {
+            fatalError("Please initialize HapticsKit by calling HapticsKit.configure(…) first.")
+        }
+    }
+    
+    /// The configured values to use in HapticsKit.
+    public private(set) var configuration: HapticsKitConfiguration
+
+
+    // MARK: - Init
+
+    private init(configuration: HapticsKitConfiguration) {
+        self.configuration = configuration
+    }
+
+
+    // MARK: - Availability
 
     /// A  `Bool`  indicating whether haptic feedback is supported on the user's device.
     public static var hapticFeedbackSupported: Bool {
@@ -34,34 +59,90 @@ public enum HapticsKit {
         #endif
     }
 
+
+    // MARK: - Actions
+
     #if os(iOS)
     /// Plays the specified notification haptic feedback type.
     /// - Parameter type: The notification haptic feedback to play.
-    public static func performNotification(
+    public func performNotification(
         _ type: UINotificationFeedbackGenerator.FeedbackType
     ) {
-        UINotificationFeedbackGenerator().notificationOccurred(type)
+        if checkHapticFeedbackEnabled() {
+            UINotificationFeedbackGenerator().notificationOccurred(type)
+        }
     }
 
     /// Plays the specified impact haptic feedback style at the specified intensity level.
     /// - Parameters:
     ///   - style: The impact haptic feedback style to play. Defaults to medium.
     ///   - intensity: The intensity at which to play the impact haptic feedback. Defaults to 100%.
-    public static func performImpact(
+    public func performImpact(
         _ style: UIImpactFeedbackGenerator.FeedbackStyle = .medium,
         at intensity: CGFloat = 1.0
     ) {
-        UIImpactFeedbackGenerator(style: style).impactOccurred(intensity: intensity)
+        if checkHapticFeedbackEnabled() {
+            UIImpactFeedbackGenerator(style: style).impactOccurred(intensity: intensity)
+        }
     }
 
     /// Plays a selection haptic feedback.
-    public static func performSelection() {
-        UISelectionFeedbackGenerator().selectionChanged()
+    public func performSelection() {
+        if checkHapticFeedbackEnabled() {
+            UISelectionFeedbackGenerator().selectionChanged()
+        }
     }
 
     #elseif os(watchOS)
-    public static func perform(_ haptic: WKHapticType) {
-        WKInterfaceDevice.current().play(haptic)
+    /// Plays the specified haptic feedback.
+    /// - Parameter haptic: The haptic feedback type to play.
+    public func perform(_ haptic: WKHapticType) {
+        if checkHapticFeedbackEnabled() {
+            WKInterfaceDevice.current().play(haptic)
+        }
     }
     #endif
+
+
+    // MARK: - Stored Values
+    
+    /// A `Bool` indicating whether haptic feedback is enabled.
+    public var hapticFeedbackEnabled: Bool {
+        get {
+            access(keyPath: \.hapticFeedbackEnabled)
+
+            if configuration.userDefaults.object(
+                forKey: configuration.storageKey
+            ) != nil {
+                return configuration.userDefaults.bool(
+                    forKey: configuration.storageKey
+                )
+            } else {
+                return true
+            }
+        }
+
+        set {
+            withMutation(keyPath: \.hapticFeedbackEnabled) {
+                if (newValue != hapticFeedbackEnabled) || (configuration.userDefaults.object(
+                    forKey: configuration.storageKey
+                ) == nil) {
+                    configuration.userDefaults.set(
+                        newValue,
+                        forKey: configuration.storageKey
+                    )
+                }
+            }
+        }
+    }
+
+    /// Checks if haptic feedback is enabled on the device.
+    /// - Returns: A `Bool` indicating whether haptic feedback is enabled.
+    private func checkHapticFeedbackEnabled() -> Bool {
+        guard HapticsKit.hapticFeedbackSupported else {
+            return false
+        }
+
+        return hapticFeedbackEnabled
+    }
 }
