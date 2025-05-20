@@ -28,6 +28,10 @@ public struct HapticsKitConfiguration: Sendable {
     ) {
         self.userDefaults = userDefaults
         self.storageKey = storageKey
+
+        userDefaults.register(defaults: [
+            storageKey: true
+        ])
     }
 
 
