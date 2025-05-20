@@ -35,14 +35,21 @@ public struct HapticsKitConfiguration: Sendable {
     }
 
 
-    // MARK: - Previews
+    // MARK: - Default Configuration
 
-    public static let preview: HapticsKitConfiguration = {
+    public static let defaultConfiguration: HapticsKitConfiguration = {
         let configuration = HapticsKitConfiguration(
             userDefaults: .standard,
             storageKey: defaultStorageKey
         )
 
         return configuration
+    }()
+
+
+    // MARK: - Previews
+
+    public static let preview: HapticsKitConfiguration = {
+        return defaultConfiguration
     }()
 }

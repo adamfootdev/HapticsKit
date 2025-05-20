@@ -25,7 +25,7 @@ public final class HapticsKit {
         if let initializedHapticsKit {
             return initializedHapticsKit
         } else {
-            fatalError("Please initialize HapticsKit by calling HapticsKit.configure(…) first.")
+            return configure(with: .defaultConfiguration)
         }
     }
     
