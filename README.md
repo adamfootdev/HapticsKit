@@ -34,7 +34,7 @@ HapticsKit can be added to your app via Swift Package Manager in Xcode. Add to y
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/adamfootdev/HapticsKit.git", from: "2.0.7")
+    .package(url: "https://github.com/adamfootdev/HapticsKit.git", from: "2.0.9")
 ]
 ```
 
