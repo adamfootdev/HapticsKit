@@ -40,6 +40,30 @@ public final class HapticsKit {
     }
 
 
+    // MARK: - Configuration
+    
+    /// Configures `HapticsKit`.
+    /// - Parameter configuration: A `HapticsKitConfiguration` object.
+    /// - Returns: The initialised `HapticsKit` object.
+    public static func configure(
+        with configuration: HapticsKitConfiguration
+    ) -> HapticsKit {
+        if let initializedHapticsKit {
+            return initializedHapticsKit
+        } else {
+            let object = HapticsKit(configuration: configuration)
+            initializedHapticsKit = object
+            return object
+        }
+    }
+    
+    /// Updates the current configuration with a new one.
+    /// - Parameter configuration: The new `HapticsKitConfiguration` to use.
+    public func updateConfiguration(with configuration: HapticsKitConfiguration) {
+        self.configuration = configuration
+    }
+
+
     // MARK: - Availability
 
     /// A  `Bool`  indicating whether haptic feedback is supported on the user's device.
@@ -145,4 +169,12 @@ public final class HapticsKit {
 
         return hapticFeedbackEnabled
     }
+
+
+    // MARK: - Previews
+
+    public static var preview: HapticsKit = {
+        let haptics = HapticsKit.configure(with: .preview)
+        return haptics
+    }()
 }
