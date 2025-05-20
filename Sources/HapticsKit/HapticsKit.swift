@@ -45,22 +45,18 @@ public final class HapticsKit {
     /// Configures `HapticsKit`.
     /// - Parameter configuration: A `HapticsKitConfiguration` object.
     /// - Returns: The initialised `HapticsKit` object.
+    @discardableResult
     public static func configure(
         with configuration: HapticsKitConfiguration
     ) -> HapticsKit {
         if let initializedHapticsKit {
+            initializedHapticsKit.configuration = configuration
             return initializedHapticsKit
         } else {
             let object = HapticsKit(configuration: configuration)
             initializedHapticsKit = object
             return object
         }
-    }
-    
-    /// Updates the current configuration with a new one.
-    /// - Parameter configuration: The new `HapticsKitConfiguration` to use.
-    public func updateConfiguration(with configuration: HapticsKitConfiguration) {
-        self.configuration = configuration
     }
 
 
