@@ -13,6 +13,7 @@ HapticsKit is available on all Apple platforms but is only functional on devices
     - [HapticsKit](#hapticskit)
 4. [Testing Haptic Feedback](#testing-haptic-feedback)
 5. [Other Packages](#other-packages)
+    - [AboutKit](https://github.com/adamfootdev/AboutKit)
     - [FeaturesKit](https://github.com/adamfootdev/FeaturesKit)
     - [HelpKit](https://github.com/adamfootdev/HelpKit)
 
